@@ -1,6 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 from app.models.features import Features
+from app.models.prediction import Prediction
+
+from app.services.model import Model
 
 router = APIRouter()
 
@@ -12,8 +15,12 @@ def read_root():
 
 
 @router.post("/predict", name="predict")
-async def predict(
-        features: Features):
-    model = ""  # TODO: access your model instance
-    prediction = model.predict()  # TODO : complete prediction
+async def predict(features:Features, request:Request):
+    
+    
+    print(request.app.state.ml_models['start-model'])
+    # prediction = request.app.ml_models["start-model"].predict(features)
+
+    prediction = request.app.state.ml_models['start-model'].predict(features)
+
     return prediction
